@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FirstFragment">
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.example.basicencoder.FirstFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_first">
+        <action
+            android:id="@+id/action_FirstFragment_to_TranspositionCipherFragment"
+            app:destination="@id/TranspositionCipherFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_CaesarCipherFragment"
+            app:destination="@id/CaesarCipherFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_VigenereCipherFragment"
+            app:destination="@id/VigenereCipherFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_MagicSquareCipherFragment"
+            app:destination="@id/MagicSquareCipherFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_TrithemusCipherFragment"
+            app:destination="@id/TrithemusCipherFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_PlayfairCipherFragment"
+            app:destination="@id/PlayfairCipherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/TranspositionCipherFragment"
+        android:name="com.example.basicencoder.TranspositionCipherFragment"
+        android:label="@string/transposition_cipher_fragment_label"/>
+    <fragment
+        android:id="@+id/CaesarCipherFragment"
+        android:name="com.example.basicencoder.CaesarCipherFragment"
+        android:label="fragment_caesar_cipher"/>
+    <fragment
+        android:id="@+id/VigenereCipherFragment"
+        android:name="com.example.basicencoder.VigenereCipherFragment"
+        android:label="fragment_vigenere_cipher"/>
+    <fragment
+        android:id="@+id/MagicSquareCipherFragment"
+        android:name="com.example.basicencoder.MagicSquareCipherFragment"
+        android:label="fragment_magic_square_cipher"/>
+    <fragment
+        android:id="@+id/TrithemusCipherFragment"
+        android:name="com.example.basicencoder.TrithemusCipherFragment"
+        android:label="fragment_trithemus_cipher"/>
+    <fragment
+        android:id="@+id/PlayfairCipherFragment"
+        android:name="com.example.basicencoder.PlayfairCipherFragment"
+        android:label="fragment_playfair_cipher" />
+</navigation>
