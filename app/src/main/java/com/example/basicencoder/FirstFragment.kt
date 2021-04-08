@@ -46,5 +46,9 @@ class FirstFragment : Fragment() {
         view.findViewById<Button>(R.id.to_playfair_button).setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_PlayfairCipherFragment)
         }
+
+        view.findViewById<Button>(R.id.to_combined_button).setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_CombinedCipherFragment)
+        }
     }
 }

@@ -12,6 +12,10 @@ class Alphabet(alphabet: String) {
         return letters[index]
     }
 
+    fun getAsCharArray() : Array<Char> {
+        return this.letters
+    }
+
     fun getKeyedAlphabet(key: String) : Alphabet? {
         if (!this.letters.toList().containsAll(key.toList())) {
             return null

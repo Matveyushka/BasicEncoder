@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_PlayfairCipherFragment"
             app:destination="@id/PlayfairCipherFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_CombinedCipherFragment"
+            app:destination="@id/CombinedCipherFragment" />
     </fragment>
     <fragment
         android:id="@+id/TranspositionCipherFragment"
@@ -53,4 +56,8 @@
         android:id="@+id/PlayfairCipherFragment"
         android:name="com.example.basicencoder.PlayfairCipherFragment"
         android:label="fragment_playfair_cipher" />
+    <fragment
+        android:id="@+id/CombinedCipherFragment"
+        android:name="com.example.basicencoder.CombinedCipherFragment"
+        android:label="fragment_combined_cipher"/>
 </navigation>
