@@ -10,4 +10,6 @@
     <string name="button_swap">Swap</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_text_to_encode_here">Enter text to encode here</string>
+    <string name="title">Title</string>
 </resources>

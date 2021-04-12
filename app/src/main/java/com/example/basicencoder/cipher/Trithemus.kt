@@ -1,76 +1,48 @@
-package com.example.basicencoder
+package com.example.basicencoder.cipher
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
-import com.example.basicencoder.databinding.FragmentCaesarCipherBinding
-import com.example.basicencoder.databinding.FragmentTrithemusCipherBinding
-import com.example.basicencoder.utils.*
+import com.example.basicencoder.utils.getSourceAlphabet
+import com.example.basicencoder.utils.standardAlphabets
+import java.lang.Exception
 
-class TrithemusCipherFragment : BasicCipherFragment() {
-    override val innerLayoutId: Int = R.layout.fragment_trithemus_cipher
-    override val title: String = "Trithemus cipher"
-
-    private var _binding: FragmentTrithemusCipherBinding? = null
-    private val binding get() = _binding!!
-    override fun getBindedParamsView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        _binding = FragmentTrithemusCipherBinding.inflate(inflater, container, false)
-
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-    
-    override fun encode(source: String): String {
-        val key = binding.trithemusKeyInput.text.toString()
+val Trithemus = object : ICipher {
+    override fun encode(source: String, arguments: Map<String, Any>): String {
+        val key = arguments["Function"] as String
 
         val processedSource = source.mapIndexed { index, _ ->
             tryToCalculateKey(key, index)
         }
 
         return if (processedSource.contains(null)) {
-            Toast.makeText(context, "Bad key", Toast.LENGTH_SHORT).show()
-            ""
+            throw Exception("Bad key")
         } else {
             source.toCharArray().mapIndexed { index, symbol ->
                 getSourceAlphabet(symbol, standardAlphabets)
-                        ?.getWithOffset(symbol, processedSource[index]!!) ?: symbol
+                    ?.getWithOffset(symbol, processedSource[index]!!) ?: symbol
             }.joinToString("")
         }
     }
 
-    override fun decode(source: String): String {
-        val key = binding.trithemusKeyInput.text.toString()
+    override fun decode(source: String, arguments: Map<String, Any>): String {
+        val key = arguments["Function"] as String
 
         val processedSource = source.mapIndexed { index, _ ->
             tryToCalculateKey(key, index)
         }
 
         return if (processedSource.contains(null)) {
-            Toast.makeText(context, "Bad key", Toast.LENGTH_SHORT).show()
-            ""
+            throw Exception("Bad key")
         } else {
             source.toCharArray().mapIndexed { index, symbol ->
                 getSourceAlphabet(symbol, standardAlphabets)
-                        ?.getWithOffset(symbol, -processedSource[index]!!) ?: symbol
+                    ?.getWithOffset(symbol, -processedSource[index]!!) ?: symbol
             }.joinToString("")
         }
     }
 
     private val operations: Map<String, (operand1: Int, operand2: Int) -> Int> = mapOf(
-            "*" to { a, b -> a * b },
-            "+" to { a, b -> a + b },
-            "-" to { a, b -> a - b }
+        "*" to { a, b -> a * b },
+        "+" to { a, b -> a + b },
+        "-" to { a, b -> a - b }
     )
 
     private fun tryToPerformOperation(operationIndex: Int, elements: MutableList<String>): String? {
@@ -86,12 +58,12 @@ class TrithemusCipherFragment : BasicCipherFragment() {
         if (leftNumber == null || rightNumber == null) {
             return null
         }
-        return operations[operator]?.invoke(leftNumber, rightNumber).toString() ?: null
+        return operations[operator]?.invoke(leftNumber, rightNumber).toString()
     }
 
     private fun parseStringToElements(source: String) : MutableList<String> {
-        var trimmedKey = source.filter { symbol -> symbol != ' ' }
-        var elements: MutableList<String> = mutableListOf()
+        val trimmedKey = source.filter { symbol -> symbol != ' ' }
+        val elements: MutableList<String> = mutableListOf()
         var currentNumber = ""
         for (symbol in trimmedKey) {
             if (symbol in '0'..'9') {
@@ -163,4 +135,6 @@ class TrithemusCipherFragment : BasicCipherFragment() {
             elements[0].toIntOrNull()
         }
     }
+
+
 }
