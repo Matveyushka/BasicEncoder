@@ -53,9 +53,11 @@ class Alphabet(alphabet: String) {
 
     fun isLetterInAlphabet(letter: Char) : Boolean = letters.contains(letter)
 
-    fun concat(alphabetPart: String) : Alphabet = Alphabet(letters.joinToString("") + alphabetPart)
+    fun isStringInAlphabet(source: String) : Boolean = source.fold(true, {result, symbol -> isLetterInAlphabet(symbol) && result})
 
-    fun concat(alphabet: Alphabet) : Alphabet = Alphabet(letters.joinToString("") + alphabet.letters)
+    fun combine(alphabetPart: String) : Alphabet = Alphabet(letters.joinToString("") + alphabetPart)
+
+    fun combine(alphabet: Alphabet) : Alphabet = Alphabet(letters.joinToString("") + alphabet.letters)
 }
 
 val englishLowerCaseAlphabet = Alphabet("abcdefghijklmnopqrstuvwxyz")
@@ -69,6 +71,12 @@ val cyrillicUpperCaseAlphabet = Alphabet("АБВГДЕЁЖЗИЙКЛМНОПРС
 val byteAlphabet = Alphabet(" йцукенгшщзхфывапролджэячсмитьбюЙЦУКЕНГШЩЗХФЫВАПРОЛДЖЭЯЧСМИТЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃⊊⊋∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ")
 
 val numbersAlphabet = Alphabet("0123456789")
+
+val commonAlphabet = englishLowerCaseAlphabet
+    .combine(englishUpperCaseAlphabet)
+    .combine(cyrillicLowerCaseAlphabet)
+    .combine(cyrillicUpperCaseAlphabet)
+    .combine(numbersAlphabet)
 
 val standardAlphabets = listOf(
         englishLowerCaseAlphabet,

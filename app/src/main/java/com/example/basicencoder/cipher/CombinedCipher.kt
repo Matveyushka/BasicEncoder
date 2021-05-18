@@ -1,14 +1,17 @@
 package com.example.basicencoder.cipher
 
+import com.example.basicencoder.utils.Alphabet
 import com.example.basicencoder.utils.cyrillicLowerCaseAlphabet
 
 val CombinedCipher = object : ICipher {
+    override val alphabet: Alphabet = cyrillicLowerCaseAlphabet
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Keyword"] as String
 
-        val minKeySize = getMinKeySize(cyrillicLowerCaseAlphabet.size)
-        if (key.length > minKeySize) {
-            throw Exception("Key should be shorter than " + (minKeySize + 1) + " symbols.")
+        val maxKeySize = getMaxKeySize(cyrillicLowerCaseAlphabet.size)
+        if (key.length > maxKeySize) {
+            throw Exception("Key should be shorter than " + (maxKeySize + 1) + " symbols.")
         }
 
         val alphabetWithoutKeyword = cyrillicLowerCaseAlphabet
@@ -37,7 +40,7 @@ val CombinedCipher = object : ICipher {
         return source
     }
 
-    fun getMinKeySize(alphabetSize: Int): Int {
+    fun getMaxKeySize(alphabetSize: Int): Int {
         for (i in 0..9) {
             if (Math.ceil((alphabetSize - i).toDouble() / 10) > 10 - i) {
                 return i - 1

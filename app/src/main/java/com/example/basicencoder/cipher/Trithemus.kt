@@ -1,10 +1,14 @@
 package com.example.basicencoder.cipher
 
+import com.example.basicencoder.utils.Alphabet
+import com.example.basicencoder.utils.commonAlphabet
 import com.example.basicencoder.utils.getSourceAlphabet
 import com.example.basicencoder.utils.standardAlphabets
 import java.lang.Exception
 
 val Trithemus = object : ICipher {
+    override val alphabet: Alphabet = commonAlphabet
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Function"] as String
 

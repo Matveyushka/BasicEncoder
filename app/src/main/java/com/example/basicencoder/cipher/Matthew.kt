@@ -1,5 +1,6 @@
 package com.example.basicencoder.cipher
 
+import com.example.basicencoder.utils.Alphabet
 import com.example.basicencoder.utils.byteAlphabet
 import com.example.basicencoder.utils.englishLowerCaseAlphabet
 import com.example.basicencoder.utils.englishUpperCaseAlphabet
@@ -60,6 +61,8 @@ private fun convertBigIntegerToString(source: BigInteger): String {
 }
 
 val Matthew = object : ICipher {
+    override val alphabet: Alphabet = byteAlphabet
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Key"] as String
 

@@ -1,6 +1,11 @@
 package com.example.basicencoder.cipher
 
+import com.example.basicencoder.utils.Alphabet
+import com.example.basicencoder.utils.englishLowerCaseAlphabet
+
 val Vigenere = object : ICipher {
+    override val alphabet: Alphabet = englishLowerCaseAlphabet
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val keyword = arguments["Keyword"] as String
 

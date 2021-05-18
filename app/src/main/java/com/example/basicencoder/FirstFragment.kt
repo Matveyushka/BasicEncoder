@@ -20,8 +20,7 @@ class UsedCipherModel(
     var title: String? = null,
     var arguments: Map<String, Type> = mapOf(),
     var defaultArguments: Map<String, Any> = mapOf(),
-    var encode: ((String, arguments: Map<String, Any>) -> String)? = null,
-    var decode: ((String, arguments: Map<String, Any>) -> String)? = null,
+    var cipher: ICipher? = null,
     var visualize: ((ConstraintLayout, String, String, Map<String, Any>) -> Unit)? = null
 ) : ViewModel() {}
 
@@ -43,65 +42,56 @@ class FirstFragment : Fragment() {
                 "Caesar cipher",
                 mapOf("Key" to Int::class.java),
                 mapOf("Key" to 1),
-                Caesar::encode,
-                Caesar::decode
+                Caesar
             ),
             UsedCipherModel(
                 "Magic square cipher",
                 mapOf(),
                 mapOf(),
-                MagicSquare::encode,
-                MagicSquare::decode,
+                MagicSquare,
                 MagicSquareVisualize::visualize
             ),
             UsedCipherModel(
                 "Trithemus",
                 mapOf("Function" to String::class.java),
                 mapOf("Function" to "3*x*x+5*x-7"),
-                Trithemus::encode,
-                Trithemus::decode
+                Trithemus
             ),
             UsedCipherModel(
                 "Vigenere",
                 mapOf("Keyword" to String::class.java),
                 mapOf(),
-                Vigenere::encode,
-                Vigenere::decode
+                Vigenere
             ),
             UsedCipherModel(
                 "Combined cipher",
                 mapOf("Keyword" to String::class.java),
                 mapOf(),
-                CombinedCipher::encode,
-                CombinedCipher::decode
+                CombinedCipher
             ),
             UsedCipherModel(
                 "Port cipher",
                 mapOf("Keyword" to String::class.java),
                 mapOf(),
-                Port::encode,
-                Port::decode
+                Port
             ),
             UsedCipherModel(
                 "Playfair cipher",
                 mapOf("Key" to String::class.java),
-                mapOf(),
-                Playfair::encode,
-                Playfair::decode
+                mapOf("Key" to ""),
+                Playfair
             ),
             UsedCipherModel (
                 "Feistel cipher",
                 mapOf("Key" to String::class.java),
                 mapOf(),
-                Feistel::encode,
-                Feistel::decode
+                Feistel
             ),
             UsedCipherModel (
                 "Matthew cipher",
                 mapOf("Key" to String::class.java),
                 mapOf(),
-                Matthew::encode,
-                Matthew::decode
+                Matthew
             )
         )
 
@@ -113,8 +103,7 @@ class FirstFragment : Fragment() {
                 usedCipherModel.title = cipher.title
                 usedCipherModel.arguments = cipher.arguments
                 usedCipherModel.defaultArguments = cipher.defaultArguments
-                usedCipherModel.encode = cipher.encode
-                usedCipherModel.decode = cipher.decode
+                usedCipherModel.cipher = cipher.cipher
                 usedCipherModel.visualize = cipher.visualize
                 findNavController().navigate(R.id.action_FirstFragment_to_cipherFragment)
             }

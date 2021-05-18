@@ -5,13 +5,10 @@ import com.example.basicencoder.utils.Alphabet
 import java.lang.Exception
 
 val Playfair = object : ICipher {
+    override val alphabet: Alphabet = Alphabet("абвгдежзийклмнопрстуфхцчшщъыьэюя")
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key: String = arguments["Key"] as String
-        if (!alphabetSourceString.toList().containsAll((source + key).toList() ))
-        {
-            throw Exception("Only lowcase cyrillic symbols")
-        }
-
         var result = ""
         for (i in source.indices step 2) {
             if (i != source.length - 1) {
@@ -27,11 +24,6 @@ val Playfair = object : ICipher {
 
     override fun decode(source: String, arguments: Map<String, Any>): String {
         val key: String = arguments["Key"] as String
-        if (!alphabetSourceString.toList().containsAll((source + key).toList() ))
-        {
-            throw Exception("Only lowcase cyrillic symbols")
-        }
-
         var result = ""
         for (i in source.indices step 2) {
             if (i != source.length - 1) {
@@ -45,8 +37,6 @@ val Playfair = object : ICipher {
         return result
     }
 
-    private val alphabetSourceString = "абвгдежзийклмнопрстуфхцчшщъыьэюя"
-    private val rectangularCyrillicAlphabet = Alphabet(alphabetSourceString)
     private val extraLetter = 'ё'
     private val alphabetWidth = 8
     private val alphabetHeight = 4
@@ -59,7 +49,7 @@ val Playfair = object : ICipher {
     }
 
     private fun encodeLetterPair(first: Char, second: Char, key: String): Pair<Char, Char> {
-        val alphabet = rectangularCyrillicAlphabet.getKeyedAlphabet(key) ?: rectangularCyrillicAlphabet
+        val alphabet = alphabet.getKeyedAlphabet(key) ?: alphabet
 
         val firstLetterPosition = getLetterPosition(first, alphabet)
         val secondLetterPosition = getLetterPosition(second, alphabet)
@@ -79,7 +69,7 @@ val Playfair = object : ICipher {
     }
 
     private fun decodeLetterPair(first: Char, second: Char, key: String): Pair<Char, Char> {
-        val alphabet = rectangularCyrillicAlphabet.getKeyedAlphabet(key) ?: rectangularCyrillicAlphabet
+        val alphabet = alphabet.getKeyedAlphabet(key) ?: alphabet
 
         if (second == extraLetter) {
             return first to first

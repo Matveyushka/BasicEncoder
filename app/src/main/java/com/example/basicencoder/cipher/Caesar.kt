@@ -3,6 +3,8 @@ package com.example.basicencoder.cipher
 import com.example.basicencoder.utils.*
 
 val Caesar = object : ICipher {
+    override val alphabet: Alphabet = commonAlphabet
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val bias = arguments["Key"].toString().toInt()
 

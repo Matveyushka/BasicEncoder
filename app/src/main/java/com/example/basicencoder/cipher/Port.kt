@@ -1,5 +1,6 @@
 package com.example.basicencoder.cipher
 
+import com.example.basicencoder.utils.Alphabet
 import com.example.basicencoder.utils.englishLowerCaseAlphabet
 import kotlin.math.pow
 
@@ -33,14 +34,14 @@ fun generateRandomSquare(sideSize: Int, key: String) : Array<Array<Int>> {
 fun completeToSuitableLength(source: Int, length: Int): String {
     var processingString = source.toString()
     while (processingString.length < length) {
-        processingString = "0" + processingString
+        processingString = "0$processingString"
     }
     return processingString
 }
 
-val alphabet = englishLowerCaseAlphabet.concat(" ")
-
 val Port = object : ICipher {
+    override val alphabet: Alphabet = englishLowerCaseAlphabet.combine(" ")
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Keyword"] as String
 

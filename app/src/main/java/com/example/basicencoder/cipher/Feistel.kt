@@ -73,6 +73,8 @@ private fun getKeyHash(key: String): String {
 }
 
 val Feistel = object : ICipher {
+    override val alphabet: Alphabet = byteAlphabet
+
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = getKeyHash(arguments["Key"] as String)
 
