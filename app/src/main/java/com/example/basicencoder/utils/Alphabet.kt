@@ -52,6 +52,10 @@ class Alphabet(alphabet: String) {
     }
 
     fun isLetterInAlphabet(letter: Char) : Boolean = letters.contains(letter)
+
+    fun concat(alphabetPart: String) : Alphabet = Alphabet(letters.joinToString("") + alphabetPart)
+
+    fun concat(alphabet: Alphabet) : Alphabet = Alphabet(letters.joinToString("") + alphabet.letters)
 }
 
 val englishLowerCaseAlphabet = Alphabet("abcdefghijklmnopqrstuvwxyz")
@@ -61,6 +65,8 @@ val englishUpperCaseAlphabet = Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 val cyrillicLowerCaseAlphabet = Alphabet("абвгдеёжзийклмнопрстуфхцчшщъыьэюя")
 
 val cyrillicUpperCaseAlphabet = Alphabet("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ")
+
+val byteAlphabet = Alphabet(" йцукенгшщзхфывапролджэячсмитьбюЙЦУКЕНГШЩЗХФЫВАПРОЛДЖЭЯЧСМИТЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃⊊⊋∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ")
 
 val numbersAlphabet = Alphabet("0123456789")
 

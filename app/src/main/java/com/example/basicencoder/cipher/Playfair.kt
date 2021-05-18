@@ -13,11 +13,13 @@ val Playfair = object : ICipher {
         }
 
         var result = ""
-        for (i in source.indices) {
-            if (i % 2 == 0 && i != source.length - 1) {
+        for (i in source.indices step 2) {
+            if (i != source.length - 1) {
                 val encodedPair = encodeLetterPair(source[i], source[i+1], key)
                 result += encodedPair.first
                 result += encodedPair.second
+            } else {
+                result += source[i]
             }
         }
         return result
@@ -31,11 +33,13 @@ val Playfair = object : ICipher {
         }
 
         var result = ""
-        for (i in source.indices) {
-            if (i % 2 == 0 && i != source.length - 1) {
+        for (i in source.indices step 2) {
+            if (i != source.length - 1) {
                 val encodedPair = decodeLetterPair(source[i], source[i+1], key)
                 result += encodedPair.first
                 result += encodedPair.second
+            } else {
+                result += source[i]
             }
         }
         return result

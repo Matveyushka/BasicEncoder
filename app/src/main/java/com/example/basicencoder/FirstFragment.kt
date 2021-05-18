@@ -23,14 +23,14 @@ class UsedCipherModel(
     var encode: ((String, arguments: Map<String, Any>) -> String)? = null,
     var decode: ((String, arguments: Map<String, Any>) -> String)? = null,
     var visualize: ((ConstraintLayout, String, String, Map<String, Any>) -> Unit)? = null
-) : ViewModel() { }
+) : ViewModel() {}
 
 class FirstFragment : Fragment() {
     val usedCipherModel: UsedCipherModel by activityViewModels()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_first, container, false)
     }
@@ -74,14 +74,42 @@ class FirstFragment : Fragment() {
                 mapOf(),
                 CombinedCipher::encode,
                 CombinedCipher::decode
+            ),
+            UsedCipherModel(
+                "Port cipher",
+                mapOf("Keyword" to String::class.java),
+                mapOf(),
+                Port::encode,
+                Port::decode
+            ),
+            UsedCipherModel(
+                "Playfair cipher",
+                mapOf("Key" to String::class.java),
+                mapOf(),
+                Playfair::encode,
+                Playfair::decode
+            ),
+            UsedCipherModel (
+                "Feistel cipher",
+                mapOf("Key" to String::class.java),
+                mapOf(),
+                Feistel::encode,
+                Feistel::decode
+            ),
+            UsedCipherModel (
+                "Matthew cipher",
+                mapOf("Key" to String::class.java),
+                mapOf(),
+                Matthew::encode,
+                Matthew::decode
             )
         )
 
         val mainLayout = view.findViewById<LinearLayout>(R.id.main_layout)
 
-        ciphers.forEach{ cipher ->
+        ciphers.forEach { cipher ->
             val button = Button(context)
-            button.setOnClickListener{
+            button.setOnClickListener {
                 usedCipherModel.title = cipher.title
                 usedCipherModel.arguments = cipher.arguments
                 usedCipherModel.defaultArguments = cipher.defaultArguments
