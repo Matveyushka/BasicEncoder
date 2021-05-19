@@ -2,13 +2,21 @@ package com.example.basicencoder.cipher
 
 import android.widget.Toast
 import com.example.basicencoder.utils.Alphabet
+import com.example.basicencoder.utils.KeyDescription
+import com.example.basicencoder.utils.cyrillicLowerCaseAlphabet
 import java.lang.Exception
 
 val Playfair = object : ICipher {
-    override val alphabet: Alphabet = Alphabet("абвгдежзийклмнопрстуфхцчшщъыьэюя")
+    override val encodeAlphabets = listOf(Alphabet("абвгдежзийклмнопрстуфхцчшщъыьэюя"))
+    override val decodeAlphabets = listOf(cyrillicLowerCaseAlphabet)
+    override val keyDescriptions = listOf(
+        KeyDescription("Keyword", String::class.java, encodeAlphabets)
+    )
+
+    private val alphabet = encodeAlphabets[0]
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
-        val key: String = arguments["Key"] as String
+        val key: String = arguments["Keyword"] as String
         var result = ""
         for (i in source.indices step 2) {
             if (i != source.length - 1) {
@@ -23,7 +31,7 @@ val Playfair = object : ICipher {
     }
 
     override fun decode(source: String, arguments: Map<String, Any>): String {
-        val key: String = arguments["Key"] as String
+        val key: String = arguments["Keyword"] as String
         var result = ""
         for (i in source.indices step 2) {
             if (i != source.length - 1) {

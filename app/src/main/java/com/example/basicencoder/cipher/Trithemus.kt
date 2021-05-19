@@ -1,13 +1,14 @@
 package com.example.basicencoder.cipher
 
-import com.example.basicencoder.utils.Alphabet
-import com.example.basicencoder.utils.commonAlphabet
-import com.example.basicencoder.utils.getSourceAlphabet
-import com.example.basicencoder.utils.standardAlphabets
+import com.example.basicencoder.utils.*
 import java.lang.Exception
 
 val Trithemus = object : ICipher {
-    override val alphabet: Alphabet = commonAlphabet
+    override val encodeAlphabets = standardAlphabets
+    override val decodeAlphabets = standardAlphabets
+    override val keyDescriptions = listOf(
+        KeyDescription("Function", String::class.java, listOf(numbersAlphabet.combine("x+-*/")), "3*x*x+5*x+2")
+    )
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Function"] as String
@@ -20,7 +21,7 @@ val Trithemus = object : ICipher {
             throw Exception("Bad key")
         } else {
             source.toCharArray().mapIndexed { index, symbol ->
-                getSourceAlphabet(symbol, standardAlphabets)
+                getSourceAlphabet(symbol, encodeAlphabets)
                     ?.getWithOffset(symbol, processedSource[index]!!) ?: symbol
             }.joinToString("")
         }
@@ -37,7 +38,7 @@ val Trithemus = object : ICipher {
             throw Exception("Bad key")
         } else {
             source.toCharArray().mapIndexed { index, symbol ->
-                getSourceAlphabet(symbol, standardAlphabets)
+                getSourceAlphabet(symbol, decodeAlphabets)
                     ?.getWithOffset(symbol, -processedSource[index]!!) ?: symbol
             }.joinToString("")
         }

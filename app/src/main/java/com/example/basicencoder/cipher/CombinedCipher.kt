@@ -1,11 +1,14 @@
 package com.example.basicencoder.cipher
 
 import com.example.basicencoder.utils.Alphabet
+import com.example.basicencoder.utils.KeyDescription
 import com.example.basicencoder.utils.cyrillicLowerCaseAlphabet
+import com.example.basicencoder.utils.numbersAlphabet
+import kotlin.math.ceil
 
 private fun getMaxKeySize(alphabetSize: Int): Int {
     for (i in 0..9) {
-        if (Math.ceil((alphabetSize - i).toDouble() / 10) > 10 - i) {
+        if (ceil((alphabetSize - i).toDouble() / 10) > 10 - i) {
             return i - 1
         }
     }
@@ -20,14 +23,20 @@ private fun validateKey(key: String, alphabet: Alphabet) {
 }
 
 val CombinedCipher = object : ICipher {
-    override val alphabet: Alphabet = cyrillicLowerCaseAlphabet
+    override val encodeAlphabets = listOf(cyrillicLowerCaseAlphabet)
+    override val decodeAlphabets = listOf(numbersAlphabet)
+    override val keyDescriptions = listOf(
+        KeyDescription("Keyword", String::class.java, listOf(cyrillicLowerCaseAlphabet))
+    )
+
+    private val alphabet = encodeAlphabets[0]
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Keyword"] as String
 
         validateKey(key, alphabet)
 
-        val alphabetWithoutKeyword = cyrillicLowerCaseAlphabet
+        val alphabetWithoutKeyword = alphabet
             .getAsCharArray()
             .filter { letter -> !key.toList().contains(letter) }
 
@@ -51,7 +60,7 @@ val CombinedCipher = object : ICipher {
 
         validateKey(key, alphabet)
 
-        val alphabetWithoutKeyword = cyrillicLowerCaseAlphabet
+        val alphabetWithoutKeyword = alphabet
             .getAsCharArray()
             .filter { letter -> !key.toList().contains(letter) }
 

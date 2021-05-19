@@ -20,7 +20,6 @@ private fun xorStrings(firstString: String, secondString: String): String? {
     return result
 }
 
-@Throws(IllegalArgumentException::class)
 private fun getNextBlock(
     block: String,
     key: String,
@@ -35,7 +34,6 @@ private fun getNextBlock(
     return "$right$nextRight"
 }
 
-@Throws(IllegalArgumentException::class)
 private fun getPrevBlock(
     block: String,
     key: String,
@@ -82,7 +80,11 @@ private fun getRoundKey(round: Int, key: String) : String {
 }
 
 val Feistel = object : ICipher {
-    override val alphabet: Alphabet = byteAlphabet
+    override val encodeAlphabets = listOf(byteAlphabet)
+    override val decodeAlphabets = listOf(byteAlphabet)
+    override val keyDescriptions = listOf(
+        KeyDescription("Key", String::class.java, listOf(byteAlphabet))
+    )
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = getKeyHash(arguments["Key"] as String)

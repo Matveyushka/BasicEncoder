@@ -1,7 +1,9 @@
 package com.example.basicencoder.cipher
 
 import com.example.basicencoder.utils.Alphabet
+import com.example.basicencoder.utils.KeyDescription
 import com.example.basicencoder.utils.englishLowerCaseAlphabet
+import com.example.basicencoder.utils.numbersAlphabet
 import kotlin.math.pow
 
 fun generateRandomSquare(sideSize: Int, key: String) : Array<Array<Int>> {
@@ -26,9 +28,7 @@ fun generateRandomSquare(sideSize: Int, key: String) : Array<Array<Int>> {
         }
     }
 
-    var square = Array(sideSize) { x -> Array(sideSize) { y -> result[x * sideSize + y] } }
-
-    return square
+    return Array(sideSize) { x -> Array(sideSize) { y -> result[x * sideSize + y] } }
 }
 
 fun completeToSuitableLength(source: Int, length: Int): String {
@@ -40,10 +40,16 @@ fun completeToSuitableLength(source: Int, length: Int): String {
 }
 
 val Port = object : ICipher {
-    override val alphabet: Alphabet = englishLowerCaseAlphabet.combine(" ")
+    override val encodeAlphabets = listOf(englishLowerCaseAlphabet.combine(" "))
+    override val decodeAlphabets = listOf(numbersAlphabet)
+    override val keyDescriptions = listOf(
+        KeyDescription("Key", String::class.java, listOf(englishLowerCaseAlphabet.combine(" ")))
+    )
+
+    private val alphabet = encodeAlphabets[0]
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
-        val key = arguments["Keyword"] as String
+        val key = arguments["Key"] as String
 
         val charCipherLength = (alphabet.size * alphabet.size).toString().length
 
@@ -73,7 +79,7 @@ val Port = object : ICipher {
     }
 
     override fun decode(source: String, arguments: Map<String, Any>): String {
-        val key = arguments["Keyword"] as String
+        val key = arguments["Key"] as String
 
         val charCipherLength = (alphabet.size * alphabet.size).toString().length
 

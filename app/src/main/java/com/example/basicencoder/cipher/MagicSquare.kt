@@ -1,6 +1,7 @@
 package com.example.basicencoder.cipher
 
 import com.example.basicencoder.utils.Alphabet
+import com.example.basicencoder.utils.KeyDescription
 import com.example.basicencoder.utils.byteAlphabet
 import kotlin.math.ceil
 import kotlin.math.sqrt
@@ -59,7 +60,9 @@ fun getDecodeSquare(numberSquare: Array<Array<Int>>, source: String) : Array<Arr
 }
 
 val MagicSquare = object: ICipher {
-    override val alphabet: Alphabet = byteAlphabet
+    override val encodeAlphabets = listOf(byteAlphabet)
+    override val decodeAlphabets = listOf(byteAlphabet)
+    override val keyDescriptions = listOf<KeyDescription>()
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
         var squareSize: Int = ceil(sqrt(source.length.toDouble())).toInt()

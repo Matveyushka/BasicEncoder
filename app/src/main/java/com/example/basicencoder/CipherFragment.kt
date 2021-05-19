@@ -2,16 +2,17 @@ package com.example.basicencoder
 
 import android.os.Bundle
 import android.text.InputType
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.basicencoder.databinding.FragmentCipherBinding
-import java.lang.Exception
+import com.example.basicencoder.utils.alert
+import com.example.basicencoder.utils.isStringInAlphabets
 
 
 class CipherFragment : Fragment() {
@@ -23,7 +24,7 @@ class CipherFragment : Fragment() {
     private val argumentValueGetters: MutableList<() -> Pair<String, Any>> = mutableListOf()
 
     private fun buildArgumentsLayout(table: TableLayout) {
-        for (argument in usedCipherModel.arguments) {
+        for (keyDescription in usedCipherModel.cipher?.keyDescriptions!!) {
             val argumentRow = TableRow(context)
             argumentRow.layoutParams = ViewGroup.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
@@ -31,36 +32,39 @@ class CipherFragment : Fragment() {
             )
 
             val argumentLabel = TextView(context)
-            argumentLabel.text = argument.key
+            argumentLabel.text = keyDescription.name
 
             val argumentInput = EditText(context)
             val params = TableRow.LayoutParams()
             params.weight = 1.0f
             argumentInput.layoutParams = params
-            if (argument.value == String::class.java) {
-                argumentInput.inputType = InputType.TYPE_CLASS_TEXT
-                argumentValueGetters.add {
-                    val input = argumentInput.text.toString()
-
-                    if (input.isEmpty() && !usedCipherModel.defaultArguments.containsKey(argument.key)) {
-                        throw IllegalArgumentException("Key ${argument.key} cannot be empty")
-                    } else if (usedCipherModel.cipher?.alphabet?.isStringInAlphabet(input) == true) {
-                        argument.key to input
-                    } else {
-                        throw IllegalArgumentException("Illegal symbols")
-                    }
+            when (keyDescription.type) {
+                String::class.java -> {
+                    argumentInput.inputType = InputType.TYPE_CLASS_TEXT
                 }
-            } else if (argument.value == Int::class.java) {
-                argumentInput.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
-                argumentValueGetters.add { argument.key to argumentInput.text.toString().toInt() }
-            } else if (argument.value == Any::class.java) {
-                argumentInput.inputType = InputType.TYPE_CLASS_TEXT
-                argumentValueGetters.add { argument.key to argumentInput.text.toString() }
-            } else {
-                throw IllegalArgumentException("The behavior for ${argument.value} argument is not defined")
+                Int::class.java -> {
+                    argumentInput.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
+                }
+                Any::class.java -> {
+                    argumentInput.inputType = InputType.TYPE_CLASS_TEXT
+                }
+                else -> {
+                    throw IllegalArgumentException("The behavior for ${keyDescription.type} argument is not defined")
+                }
             }
-
-            argumentInput.setText(usedCipherModel.defaultArguments[argument.key]?.toString() ?: "")
+            argumentValueGetters.add {
+                val input = argumentInput.text.toString()
+                if (input.isEmpty() && keyDescription.defaultValue == null) {
+                    throw IllegalArgumentException("Key ${keyDescription.name} cannot be empty")
+                } else if (input.isEmpty()) {
+                    keyDescription.name to keyDescription.defaultValue!!
+                } else if (keyDescription.alphabets?.isStringInAlphabets(input) != false) {
+                    keyDescription.name to input
+                } else {
+                    throw IllegalArgumentException("Illegal symbols")
+                }
+            }
+            argumentInput.setText(keyDescription.defaultValue?.toString() ?: "")
 
             argumentRow.addView(argumentLabel)
             argumentRow.addView(argumentInput)
@@ -69,7 +73,7 @@ class CipherFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         _binding = FragmentCipherBinding.inflate(inflater, container, false)
 
         val view = binding.root
@@ -86,7 +90,9 @@ class CipherFragment : Fragment() {
             visualizeLayout,
             "",
             "",
-            usedCipherModel.defaultArguments
+            (usedCipherModel.cipher?.keyDescriptions!!.map { keyDescription ->
+                keyDescription.name to (keyDescription.defaultValue.toString() ?: "")
+            }).toMap()
         )
 
         return view
@@ -103,7 +109,7 @@ class CipherFragment : Fragment() {
 
                 val input = binding.inputPlace.text.toString()
 
-                if (usedCipherModel.cipher?.alphabet?.isStringInAlphabet(input) == true) {
+                if (usedCipherModel.cipher?.encodeAlphabets?.isStringInAlphabets(input) == true) {
                     encodedMessage = usedCipherModel.cipher?.encode(
                         input,
                         arguments
@@ -112,7 +118,7 @@ class CipherFragment : Fragment() {
                     throw Exception("Illegal symbols in message input")
                 }
             } catch (exception: Exception) {
-                Toast.makeText(context, exception.message, LENGTH_SHORT).show()
+                alert(exception.message ?: "", this.requireContext())
             }
 
             binding.outputPlace.text = encodedMessage
@@ -121,22 +127,28 @@ class CipherFragment : Fragment() {
                 view.findViewById(R.id.visualize_place),
                 binding.inputPlace.text.toString(),
                 encodedMessage ?: "",
-                usedCipherModel.defaultArguments
+                argumentValueGetters.map { getter -> getter() }.toMap()
             )
         }
 
         binding.decodeButton.setOnClickListener{
-            val arguments = argumentValueGetters.map { getter -> getter() }.toMap()
-
             var decodedMessage: String? = null
 
             try {
-                decodedMessage = usedCipherModel.cipher?.decode(
-                    binding.inputPlace.text.toString(),
-                    arguments
-                )
+                val arguments = argumentValueGetters.map { getter -> getter() }.toMap()
+
+                val input = binding.inputPlace.text.toString()
+
+                if (usedCipherModel.cipher?.decodeAlphabets?.isStringInAlphabets(input) == true) {
+                    decodedMessage = usedCipherModel.cipher?.decode(
+                        binding.inputPlace.text.toString(),
+                        arguments
+                    )
+                } else {
+                    throw Exception("Illegal symbols in message input")
+                }
             } catch (exception: Exception) {
-                Toast.makeText(context, exception.message, LENGTH_SHORT).show()
+                alert(exception.message ?: "", this.requireContext())
             }
 
             binding.outputPlace.text = decodedMessage
@@ -145,7 +157,7 @@ class CipherFragment : Fragment() {
                 view.findViewById(R.id.visualize_place),
                 binding.inputPlace.text.toString(),
                 decodedMessage ?: "",
-                usedCipherModel.defaultArguments
+                argumentValueGetters.map { getter -> getter() }.toMap()
             )
         }
 

@@ -53,7 +53,7 @@ class Alphabet(alphabet: String) {
 
     fun isLetterInAlphabet(letter: Char) : Boolean = letters.contains(letter)
 
-    fun isStringInAlphabet(source: String) : Boolean = source.fold(true, {result, symbol -> isLetterInAlphabet(symbol) && result})
+    fun isStringInAlphabet(source: String) : Boolean = source.all { symbol -> isLetterInAlphabet(symbol)}
 
     fun combine(alphabetPart: String) : Alphabet = Alphabet(letters.joinToString("") + alphabetPart)
 
@@ -93,4 +93,12 @@ fun getSourceAlphabet(letter: Char, alphabets: List<Alphabet> ) : Alphabet? {
     } else {
         null
     }
+}
+
+fun List<Alphabet>.isSymbolInAlphabets(symbol: Char): Boolean {
+    return this.any { alphabet -> alphabet.isLetterInAlphabet(symbol) }
+}
+
+fun List<Alphabet>.isStringInAlphabets(source: String): Boolean {
+    return this.any { alphabet -> alphabet.isStringInAlphabet(source) }
 }
