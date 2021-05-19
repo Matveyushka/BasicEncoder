@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.basicencoder.cipher.*
+import com.example.basicencoder.cipher.visualizer.IVisualizer
 import com.example.basicencoder.cipher.visualizer.MagicSquareVisualize
 import java.lang.reflect.Type
 
@@ -21,7 +22,7 @@ class UsedCipherModel(
     var arguments: Map<String, Type> = mapOf(),
     var defaultArguments: Map<String, Any> = mapOf(),
     var cipher: ICipher? = null,
-    var visualize: ((ConstraintLayout, String, String, Map<String, Any>) -> Unit)? = null
+    var visualizer: IVisualizer? = null
 ) : ViewModel() {}
 
 class FirstFragment : Fragment() {
@@ -49,11 +50,11 @@ class FirstFragment : Fragment() {
                 mapOf(),
                 mapOf(),
                 MagicSquare,
-                MagicSquareVisualize::visualize
+                MagicSquareVisualize
             ),
             UsedCipherModel(
                 "Trithemus",
-                mapOf("Function" to String::class.java),
+                mapOf("Function" to Any::class.java),
                 mapOf("Function" to "3*x*x+5*x-7"),
                 Trithemus
             ),
@@ -104,7 +105,7 @@ class FirstFragment : Fragment() {
                 usedCipherModel.arguments = cipher.arguments
                 usedCipherModel.defaultArguments = cipher.defaultArguments
                 usedCipherModel.cipher = cipher.cipher
-                usedCipherModel.visualize = cipher.visualize
+                usedCipherModel.visualizer = cipher.visualizer
                 findNavController().navigate(R.id.action_FirstFragment_to_cipherFragment)
             }
             button.text = cipher.title

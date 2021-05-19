@@ -72,6 +72,15 @@ private fun getKeyHash(key: String): String {
             byteAlphabet[numberHash / 256 / 256 / 256 % 256]
 }
 
+private fun getRoundKey(round: Int, key: String) : String {
+    val numberHash = (key.hashCode().toDouble().pow(6 + round) % MAX_VALUE).toInt()
+
+    return byteAlphabet[numberHash % 256].toString() +
+            byteAlphabet[numberHash / 256 % 256] +
+            byteAlphabet[numberHash / 256 / 256 % 256] +
+            byteAlphabet[numberHash / 256 / 256 / 256 % 256]
+}
+
 val Feistel = object : ICipher {
     override val alphabet: Alphabet = byteAlphabet
 
@@ -89,7 +98,7 @@ val Feistel = object : ICipher {
             for (blockNumber in 0 until blocksAmount) {
                 blocks.add(getNextBlock(
                     stringToEncode.substring(blockNumber * 8, blockNumber * 8 + 8),
-                    key,
+                    getRoundKey(round, key),
                     ::multMod
                     ))
             }
@@ -114,7 +123,7 @@ val Feistel = object : ICipher {
                 blocks.add(
                     getPrevBlock(
                     stringToDecode.substring(blockNumber * 8, blockNumber * 8 + 8),
-                    key,
+                        getRoundKey(31 - round, key),
                     ::multMod
                     ))
             }

@@ -17,8 +17,8 @@ fun generateRandomSquare(sideSize: Int, key: String) : Array<Array<Int>> {
 
     for (i in 0 until size * 6) {
         if (i % 2 == 0) {
-            val firstIndex = keyValue / (i + 2) % size
-            val secondIndex = keyValue / (i + 3) % size
+            val firstIndex = keyValue * 1234 / (i + 2) % size
+            val secondIndex = keyValue * 4321 / (i + 3) % size
 
             val temp = result[firstIndex]
             result[firstIndex] = result[secondIndex]

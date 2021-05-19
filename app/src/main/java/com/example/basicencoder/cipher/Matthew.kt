@@ -88,7 +88,7 @@ val Matthew = object : ICipher {
         val key = arguments["Key"] as String
 
         val _key = convertStringToBigInteger(key)
-        val _encoded = convertStringToBigInteger(source)  / (_key / BigInteger.valueOf(7))
+        val _encoded = convertStringToBigInteger(source) / (_key / BigInteger.valueOf(7))
 
         if (_key == BigInteger.valueOf(0)) {
             throw Exception("Key cannot be empty")

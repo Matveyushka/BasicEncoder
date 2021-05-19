@@ -53,6 +53,9 @@ class CipherFragment : Fragment() {
             } else if (argument.value == Int::class.java) {
                 argumentInput.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
                 argumentValueGetters.add { argument.key to argumentInput.text.toString().toInt() }
+            } else if (argument.value == Any::class.java) {
+                argumentInput.inputType = InputType.TYPE_CLASS_TEXT
+                argumentValueGetters.add { argument.key to argumentInput.text.toString() }
             } else {
                 throw IllegalArgumentException("The behavior for ${argument.value} argument is not defined")
             }
@@ -79,7 +82,7 @@ class CipherFragment : Fragment() {
 
         val visualizeLayout = view.findViewById<ConstraintLayout>(R.id.visualize_place)
 
-        usedCipherModel.visualize?.invoke(
+        usedCipherModel.visualizer?.showEncode(
             visualizeLayout,
             "",
             "",
@@ -114,8 +117,8 @@ class CipherFragment : Fragment() {
 
             binding.outputPlace.text = encodedMessage
 
-            usedCipherModel.visualize?.invoke(
-                view.findViewById<ConstraintLayout>(R.id.visualize_place),
+            usedCipherModel.visualizer?.showEncode(
+                view.findViewById(R.id.visualize_place),
                 binding.inputPlace.text.toString(),
                 encodedMessage ?: "",
                 usedCipherModel.defaultArguments
@@ -138,8 +141,8 @@ class CipherFragment : Fragment() {
 
             binding.outputPlace.text = decodedMessage
 
-            usedCipherModel.visualize?.invoke(
-                view.findViewById<ConstraintLayout>(R.id.visualize_place),
+            usedCipherModel.visualizer?.showDecode(
+                view.findViewById(R.id.visualize_place),
                 binding.inputPlace.text.toString(),
                 decodedMessage ?: "",
                 usedCipherModel.defaultArguments

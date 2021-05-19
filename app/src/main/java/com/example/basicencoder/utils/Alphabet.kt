@@ -68,7 +68,7 @@ val cyrillicLowerCaseAlphabet = Alphabet("абвгдеёжзийклмнопрс
 
 val cyrillicUpperCaseAlphabet = Alphabet("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ")
 
-val byteAlphabet = Alphabet(" йцукенгшщзхфывапролджэячсмитьбюЙЦУКЕНГШЩЗХФЫВАПРОЛДЖЭЯЧСМИТЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃⊊⊋∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ")
+val byteAlphabet = Alphabet(" йцукеёнгшщзхфывапролджэячсмитьбюЙЦУКЕЁНГШЩЗХФЫВАПРОЛДЖЭЯЧСМИТЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ")
 
 val numbersAlphabet = Alphabet("0123456789")
 

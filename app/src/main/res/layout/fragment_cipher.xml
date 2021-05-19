@@ -34,7 +34,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/innerScrollLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <TableLayout
                 android:id="@+id/argumentsLayout"

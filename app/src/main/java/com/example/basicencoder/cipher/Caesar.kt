@@ -16,7 +16,7 @@ val Caesar = object : ICipher {
     override fun decode(source: String, arguments: Map<String, Any>): String {
         val bias = arguments["Key"].toString().toInt()
 
-        return encode(source, mapOf("Key" to (-bias).toString()))
+        return encode(source, mapOf("Key" to -bias))
     }
 }
 
