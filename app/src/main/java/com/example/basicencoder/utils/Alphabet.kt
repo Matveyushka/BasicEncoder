@@ -2,7 +2,7 @@ package com.example.basicencoder.utils
 
 import kotlin.math.ceil
 
-class Alphabet(alphabet: String) {
+class Alphabet(alphabet: String, val name: String) {
     private var letters: Array<Char> = alphabet.toCharArray().distinct().toTypedArray()
 
     var size: Int = letters.size
@@ -20,7 +20,7 @@ class Alphabet(alphabet: String) {
         if (!this.letters.toList().containsAll(key.toList())) {
             return null
         }
-        return Alphabet(key + this.letters.filter { char -> !key.contains(char) }.joinToString(""))
+        return Alphabet(key + this.letters.filter { char -> !key.contains(char) }.joinToString(""), name)
     }
 
     fun getLetterNumber(letter: Char) : Int? {
@@ -55,22 +55,24 @@ class Alphabet(alphabet: String) {
 
     fun isStringInAlphabet(source: String) : Boolean = source.all { symbol -> isLetterInAlphabet(symbol)}
 
-    fun combine(alphabetPart: String) : Alphabet = Alphabet(letters.joinToString("") + alphabetPart)
+    fun combine(alphabetPart: String) : Alphabet = Alphabet(letters.joinToString("") + alphabetPart, name)
 
-    fun combine(alphabet: Alphabet) : Alphabet = Alphabet(letters.joinToString("") + alphabet.letters)
+    fun combine(alphabet: Alphabet) : Alphabet = Alphabet(letters.joinToString("") + alphabet.letters, name)
+
+    fun nameIt(newName: String): Alphabet = Alphabet(letters.joinToString("") , newName)
 }
 
-val englishLowerCaseAlphabet = Alphabet("abcdefghijklmnopqrstuvwxyz")
+val englishLowerCaseAlphabet = Alphabet("abcdefghijklmnopqrstuvwxyz", "English lower case")
 
-val englishUpperCaseAlphabet = Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+val englishUpperCaseAlphabet = Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "English UPPER case")
 
-val cyrillicLowerCaseAlphabet = Alphabet("абвгдеёжзийклмнопрстуфхцчшщъыьэюя")
+val cyrillicLowerCaseAlphabet = Alphabet("абвгдеёжзийклмнопрстуфхцчшщъыьэюя", "Cyrillic lower case")
 
-val cyrillicUpperCaseAlphabet = Alphabet("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ")
+val cyrillicUpperCaseAlphabet = Alphabet("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "Cyrillic UPPER case")
 
-val byteAlphabet = Alphabet(" йцукеёнгшщзхфывапролджэячсмитьбюЙЦУКЕЁНГШЩЗХФЫВАПРОЛДЖЭЯЧСМИТЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ")
+val byteAlphabet = Alphabet(" йцукеёнгшщзхфывапролджэячсмитьбюЙЦУКЕЁНГШЩЗХФЫВАПРОЛДЖЭЯЧСМИТЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ", "Byte alphabet")
 
-val numbersAlphabet = Alphabet("0123456789")
+val numbersAlphabet = Alphabet("0123456789", "Numbers")
 
 val commonAlphabet = englishLowerCaseAlphabet
     .combine(englishUpperCaseAlphabet)

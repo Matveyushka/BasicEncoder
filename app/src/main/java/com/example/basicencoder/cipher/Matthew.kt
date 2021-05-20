@@ -66,20 +66,15 @@ val Matthew = object : ICipher {
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Key"] as String
-
-        val _source = convertStringToBigInteger(source)
-        val _key = convertStringToBigInteger(key)
-
-        if (_key == BigInteger.valueOf(0)) {
+        val sourceNumeric = convertStringToBigInteger(source)
+        val keyNumeric = convertStringToBigInteger(key)
+        if (keyNumeric == BigInteger.valueOf(0)) {
             throw Exception("Key cannot be empty")
         }
-
-        val log = ceilLog(_source, _key)
-
-        val power = pow(_key, log)
-
-        val numberResult = (-_source + power + log) * (_key / BigInteger.valueOf(7))
-
+        val log = ceilLog(sourceNumeric, keyNumeric)
+        val power = pow(keyNumeric, log)
+        val numberResult = (-sourceNumeric + power + log) *
+                (keyNumeric / BigInteger.valueOf(7))
         return convertBigIntegerToString(
             numberResult
         )
@@ -87,20 +82,16 @@ val Matthew = object : ICipher {
 
     override fun decode(source: String, arguments: Map<String, Any>): String {
         val key = arguments["Key"] as String
-
-        val _key = convertStringToBigInteger(key)
-        val _encoded = convertStringToBigInteger(source) / (_key / BigInteger.valueOf(7))
-
-        if (_key == BigInteger.valueOf(0)) {
+        val keyNumeric = convertStringToBigInteger(key)
+        val encodedNumeric = convertStringToBigInteger(source) /
+                (keyNumeric / BigInteger.valueOf(7))
+        if (keyNumeric == BigInteger.valueOf(0)) {
             throw Exception("Key cannot be empty")
         }
-
-        val restoredCeilLog = restoreCeilLog(_encoded, _key)
-
-        val power = pow(_key, restoredCeilLog)
-
+        val restoredCeilLog = restoreCeilLog(encodedNumeric, keyNumeric)
+        val power = pow(keyNumeric, restoredCeilLog)
         return convertBigIntegerToString(
-            -_encoded + power + restoredCeilLog
+            -encodedNumeric + power + restoredCeilLog
         )
     }
 }

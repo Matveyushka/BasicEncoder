@@ -17,7 +17,7 @@ private fun getMaxKeySize(alphabetSize: Int): Int {
 
 private fun validateKey(key: String, alphabet: Alphabet) {
     val maxKeySize = getMaxKeySize(alphabet.size)
-    if (key.length > maxKeySize) {
+    if (key.toCharArray().distinct().count() > maxKeySize) {
         throw Exception("Key should be shorter than " + (maxKeySize + 1) + " symbols.")
     }
 }

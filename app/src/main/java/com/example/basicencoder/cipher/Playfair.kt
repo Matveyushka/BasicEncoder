@@ -7,7 +7,11 @@ import com.example.basicencoder.utils.cyrillicLowerCaseAlphabet
 import java.lang.Exception
 
 val Playfair = object : ICipher {
-    override val encodeAlphabets = listOf(Alphabet("абвгдежзийклмнопрстуфхцчшщъыьэюя"))
+    override val encodeAlphabets = listOf(
+        Alphabet(
+            "абвгдежзийклмнопрстуфхцчшщъыьэюя",
+            "Cyrillic lower case without 'ё'")
+        )
     override val decodeAlphabets = listOf(cyrillicLowerCaseAlphabet)
     override val keyDescriptions = listOf(
         KeyDescription("Keyword", String::class.java, encodeAlphabets)
@@ -62,15 +66,18 @@ val Playfair = object : ICipher {
         val firstLetterPosition = getLetterPosition(first, alphabet)
         val secondLetterPosition = getLetterPosition(second, alphabet)
 
-        return if (firstLetterPosition.first != secondLetterPosition.first && firstLetterPosition.second != secondLetterPosition.second) {
+        return if (firstLetterPosition.first != secondLetterPosition.first
+            && firstLetterPosition.second != secondLetterPosition.second) {
             alphabet[secondLetterPosition.first + firstLetterPosition.second * alphabetWidth] to
-                    alphabet[firstLetterPosition.first + secondLetterPosition.second * alphabetWidth]
-        } else if (firstLetterPosition.first == secondLetterPosition.first && firstLetterPosition.second != secondLetterPosition.second) {
+            alphabet[firstLetterPosition.first + secondLetterPosition.second * alphabetWidth]
+        } else if (firstLetterPosition.first == secondLetterPosition.first
+            && firstLetterPosition.second != secondLetterPosition.second) {
             alphabet[firstLetterPosition.first + (firstLetterPosition.second + 1 + alphabetHeight) % alphabetHeight * alphabetWidth] to
-                    alphabet[secondLetterPosition.first + (secondLetterPosition.second + 1 + alphabetHeight) % alphabetHeight * alphabetWidth]
-        } else if (firstLetterPosition.first != secondLetterPosition.first && firstLetterPosition.second == secondLetterPosition.second) {
+            alphabet[secondLetterPosition.first + (secondLetterPosition.second + 1 + alphabetHeight) % alphabetHeight * alphabetWidth]
+        } else if (firstLetterPosition.first != secondLetterPosition.first
+            && firstLetterPosition.second == secondLetterPosition.second) {
             alphabet[(firstLetterPosition.first + 1 + alphabetWidth) % alphabetWidth + firstLetterPosition.second * alphabetWidth] to
-                    alphabet[(secondLetterPosition.first + 1 + alphabetWidth) % alphabetWidth + secondLetterPosition.second * alphabetWidth]
+            alphabet[(secondLetterPosition.first + 1 + alphabetWidth) % alphabetWidth + secondLetterPosition.second * alphabetWidth]
         } else {
             first to extraLetter
         }
@@ -86,15 +93,18 @@ val Playfair = object : ICipher {
         val firstLetterPosition = getLetterPosition(first, alphabet)
         val secondLetterPosition = getLetterPosition(second, alphabet)
 
-        return if (firstLetterPosition.first != secondLetterPosition.first && firstLetterPosition.second != secondLetterPosition.second) {
+        return if (firstLetterPosition.first != secondLetterPosition.first
+            && firstLetterPosition.second != secondLetterPosition.second) {
             alphabet[secondLetterPosition.first + firstLetterPosition.second * alphabetWidth] to
-                    alphabet[firstLetterPosition.first + secondLetterPosition.second * alphabetWidth]
-        } else if (firstLetterPosition.first == secondLetterPosition.first && firstLetterPosition.second != secondLetterPosition.second) {
+            alphabet[firstLetterPosition.first + secondLetterPosition.second * alphabetWidth]
+        } else if (firstLetterPosition.first == secondLetterPosition.first
+            && firstLetterPosition.second != secondLetterPosition.second) {
             alphabet[firstLetterPosition.first + (firstLetterPosition.second - 1 + alphabetHeight) % alphabetHeight * alphabetWidth] to
-                    alphabet[secondLetterPosition.first + (secondLetterPosition.second - 1 + alphabetHeight) % alphabetHeight * alphabetWidth]
-        } else if (firstLetterPosition.first != secondLetterPosition.first && firstLetterPosition.second == secondLetterPosition.second) {
+            alphabet[secondLetterPosition.first + (secondLetterPosition.second - 1 + alphabetHeight) % alphabetHeight * alphabetWidth]
+        } else if (firstLetterPosition.first != secondLetterPosition.first
+            && firstLetterPosition.second == secondLetterPosition.second) {
             alphabet[(firstLetterPosition.first - 1 + alphabetWidth) % alphabetWidth + firstLetterPosition.second * alphabetWidth] to
-                    alphabet[(secondLetterPosition.first - 1 + alphabetWidth) % alphabetWidth + secondLetterPosition.second * alphabetWidth]
+            alphabet[(secondLetterPosition.first - 1 + alphabetWidth) % alphabetWidth + secondLetterPosition.second * alphabetWidth]
         } else {
             first to extraLetter
         }

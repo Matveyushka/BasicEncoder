@@ -43,7 +43,10 @@ val Port = object : ICipher {
     override val encodeAlphabets = listOf(englishLowerCaseAlphabet.combine(" "))
     override val decodeAlphabets = listOf(numbersAlphabet)
     override val keyDescriptions = listOf(
-        KeyDescription("Key", String::class.java, listOf(englishLowerCaseAlphabet.combine(" ")))
+        KeyDescription(
+            "Key",
+            String::class.java,
+            listOf(englishLowerCaseAlphabet.combine(" ")))
     )
 
     private val alphabet = encodeAlphabets[0]

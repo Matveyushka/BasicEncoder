@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package com.example.basicencoder.cipher
 
 import com.example.basicencoder.utils.*
@@ -14,7 +16,9 @@ private fun xorStrings(firstString: String, secondString: String): String? {
     val secondByteString = stringToByteArray(secondString)
     var result: String? = null
     if (!firstByteString.contains(null) && !secondByteString.contains(null)) {
-        val xorResult = firstByteString.mapIndexed { index, value -> value!!.toInt() xor secondByteString[index]!!.toInt() }
+        val xorResult = firstByteString.mapIndexed {
+                index, value -> value!!.toInt() xor secondByteString[index]!!.toInt()
+            }
         result = xorResult.map { byte -> byteAlphabet[byte] }.joinToString("")
     }
     return result
@@ -28,8 +32,8 @@ private fun getNextBlock(
     if (block.length != 8) {
         throw IllegalArgumentException("Block must be 8 chars length.")
     }
-    val left = block.substring(0, 4)
-    val right = block.substring(4, 8)
+    val left = block.substring(0, block.length / 2)
+    val right = block.substring(block.length / 2, block.length)
     val nextRight = xorStrings(convertSubBlock(right, key), left)
     return "$right$nextRight"
 }
@@ -42,20 +46,19 @@ private fun getPrevBlock(
     if (block.length != 8) {
         throw IllegalArgumentException("Block must be 8 chars length.")
     }
-    val left = block.substring(0, 4)
-    val right = block.substring(4, 8)
+    val left = block.substring(0, block.length / 2)
+    val right = block.substring(block.length / 2, block.length)
     val nextLeft = xorStrings(convertSubBlock(left, key), right)
     return "$nextLeft$left"
 }
 
-private fun multMod(part: String, key: String): String {
-    val partArray = stringToByteArray(part)
+private fun multMod(blockPart: String, key: String): String {
+    val partArray = stringToByteArray(blockPart)
     val keyArray = stringToByteArray(key)
     var result: String? = null
-
     if (!partArray.contains(null) && !keyArray.contains(null)) {
         result = partArray
-            .mapIndexed { index, value -> (value!!.toInt() + keyArray[index]!!.toInt()) % 256 }
+            .mapIndexed { index, value -> (value!!.toInt() * keyArray[index]!!.toInt()) % 256 }
             .map { number -> byteAlphabet[number] }.joinToString("")
     }
     return result!!
@@ -63,7 +66,6 @@ private fun multMod(part: String, key: String): String {
 
 private fun getKeyHash(key: String): String {
     val numberHash = (key.hashCode().toDouble().pow(12) % MAX_VALUE).toInt()
-
     return byteAlphabet[numberHash % 256].toString() +
             byteAlphabet[numberHash / 256 % 256] +
             byteAlphabet[numberHash / 256 / 256 % 256] +
@@ -72,7 +74,6 @@ private fun getKeyHash(key: String): String {
 
 private fun getRoundKey(round: Int, key: String) : String {
     val numberHash = (key.hashCode().toDouble().pow(6 + round) % MAX_VALUE).toInt()
-
     return byteAlphabet[numberHash % 256].toString() +
             byteAlphabet[numberHash / 256 % 256] +
             byteAlphabet[numberHash / 256 / 256 % 256] +
@@ -122,10 +123,9 @@ val Feistel = object : ICipher {
         for (round in 0 until rounds) {
             val blocks : MutableList<String> = mutableListOf()
             for (blockNumber in 0 until blocksAmount) {
-                blocks.add(
-                    getPrevBlock(
+                blocks.add(getPrevBlock(
                     stringToDecode.substring(blockNumber * 8, blockNumber * 8 + 8),
-                        getRoundKey(31 - round, key),
+                    getRoundKey(31 - round, key),
                     ::multMod
                     ))
             }

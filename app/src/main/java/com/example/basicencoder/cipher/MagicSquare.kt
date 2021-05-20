@@ -1,6 +1,5 @@
 package com.example.basicencoder.cipher
 
-import com.example.basicencoder.utils.Alphabet
 import com.example.basicencoder.utils.KeyDescription
 import com.example.basicencoder.utils.byteAlphabet
 import kotlin.math.ceil
@@ -82,7 +81,9 @@ val MagicSquare = object: ICipher {
         if (squareSize % 2 == 0) { squareSize++ }
 
         val numberSquare = generateSquare(squareSize)
-        val intSquare = numberSquare.map { row -> row.map { index -> index?.toInt() ?: 0 }.toTypedArray() }.toTypedArray()
+        val intSquare = numberSquare
+            .map { row -> row.map { index -> index?.toInt() ?: 0 }.toTypedArray() }
+            .toTypedArray()
 
         val decodeSquare = getDecodeSquare(intSquare, source)
 
@@ -90,10 +91,11 @@ val MagicSquare = object: ICipher {
 
         var result = ""
 
-        while (decodeSquare[squareTraveller.y][squareTraveller.x] != null && result.length != squareSize * squareSize) {
-            result += decodeSquare[squareTraveller.y][squareTraveller.x]
-            squareTraveller.getNextCoordinates()
-        }
+        while (decodeSquare[squareTraveller.y][squareTraveller.x] != null
+            && result.length != squareSize * squareSize) {
+                result += decodeSquare[squareTraveller.y][squareTraveller.x]
+                squareTraveller.getNextCoordinates()
+            }
 
         return result
     }

@@ -7,7 +7,14 @@ val Trithemus = object : ICipher {
     override val encodeAlphabets = standardAlphabets
     override val decodeAlphabets = standardAlphabets
     override val keyDescriptions = listOf(
-        KeyDescription("Function", String::class.java, listOf(numbersAlphabet.combine("x+-*/")), "3*x*x+5*x+2")
+        KeyDescription(
+            "Function",
+            String::class.java,
+            listOf(
+                numbersAlphabet
+                    .combine("x+-*/")
+                    .nameIt("Formula")),
+            "3*x*x+5*x+2")
     )
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
@@ -112,7 +119,10 @@ val Trithemus = object : ICipher {
                 index--
                 operationCompleted = false
             }
-            if (!(elements.contains("*") || elements.contains("+") || elements.contains("-")) && elements.count() > 1) {
+            if (!(elements.contains("*")
+                        || elements.contains("+")
+                        || elements.contains("-"))
+                && elements.count() > 1) {
                 badKey = true
             }
         }
@@ -132,7 +142,8 @@ val Trithemus = object : ICipher {
 
         var badKey = false
         while (elements.count() != 1 && !badKey) {
-            badKey = runOperators(elements, arrayOf("*")) || runOperators(elements, arrayOf("+", "-"))
+            badKey = runOperators(elements, arrayOf("*"))
+                    || runOperators(elements, arrayOf("+", "-"))
         }
         return if (badKey) {
             null

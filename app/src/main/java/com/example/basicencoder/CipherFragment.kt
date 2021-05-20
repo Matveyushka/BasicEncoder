@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.basicencoder.databinding.FragmentCipherBinding
+import com.example.basicencoder.utils.Alphabet
 import com.example.basicencoder.utils.alert
 import com.example.basicencoder.utils.isStringInAlphabets
 
@@ -22,6 +23,12 @@ class CipherFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val argumentValueGetters: MutableList<() -> Pair<String, Any>> = mutableListOf()
+
+    private fun getAlphabetsNamesListString(alphabets: List<Alphabet>) : String {
+        return alphabets
+            .fold("", { acc, value -> "${acc}\n- ${value.name};"})
+            .substringBeforeLast(';') + '.'
+    }
 
     private fun buildArgumentsLayout(table: TableLayout) {
         for (keyDescription in usedCipherModel.cipher?.keyDescriptions!!) {
@@ -43,13 +50,15 @@ class CipherFragment : Fragment() {
                     argumentInput.inputType = InputType.TYPE_CLASS_TEXT
                 }
                 Int::class.java -> {
-                    argumentInput.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
+                    argumentInput.inputType = InputType.TYPE_CLASS_NUMBER or
+                            InputType.TYPE_NUMBER_FLAG_SIGNED
                 }
                 Any::class.java -> {
                     argumentInput.inputType = InputType.TYPE_CLASS_TEXT
                 }
                 else -> {
-                    throw IllegalArgumentException("The behavior for ${keyDescription.type} argument is not defined")
+                    throw IllegalArgumentException("The behavior for " +
+                            "${keyDescription.type} argument is not defined")
                 }
             }
             argumentValueGetters.add {
@@ -61,7 +70,9 @@ class CipherFragment : Fragment() {
                 } else if (keyDescription.alphabets?.isStringInAlphabets(input) != false) {
                     keyDescription.name to input
                 } else {
-                    throw IllegalArgumentException("Illegal symbols")
+                    throw IllegalArgumentException("Illegal symbols in key " +
+                            "'${keyDescription.name}'. It can be one of the following alphabets:" +
+                            getAlphabetsNamesListString(keyDescription.alphabets))
                 }
             }
             argumentInput.setText(keyDescription.defaultValue?.toString() ?: "")
@@ -115,7 +126,9 @@ class CipherFragment : Fragment() {
                         arguments
                     )
                 } else {
-                    throw Exception("Illegal symbols in message input")
+                    throw Exception("Illegal symbols in message input. It can be one of the " +
+                            "following alphabets:" +
+                            getAlphabetsNamesListString(usedCipherModel.cipher!!.encodeAlphabets))
                 }
             } catch (exception: Exception) {
                 alert(exception.message ?: "", this.requireContext())
@@ -145,7 +158,9 @@ class CipherFragment : Fragment() {
                         arguments
                     )
                 } else {
-                    throw Exception("Illegal symbols in message input")
+                    throw Exception("Illegal symbols in message input. It can be one of the " +
+                            "following alphabets:" +
+                            getAlphabetsNamesListString(usedCipherModel.cipher!!.decodeAlphabets))
                 }
             } catch (exception: Exception) {
                 alert(exception.message ?: "", this.requireContext())
@@ -162,7 +177,8 @@ class CipherFragment : Fragment() {
         }
 
         binding.swapButton.setOnClickListener {
-            binding.inputPlace.setText(view.findViewById<TextView>(R.id.outputPlace).text.toString())
+            binding.inputPlace
+                .setText(view.findViewById<TextView>(R.id.outputPlace).text.toString())
             binding.outputPlace.text = ""
         }
 
