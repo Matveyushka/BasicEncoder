@@ -45,7 +45,9 @@ fun generateSquare(n: Int, source: String? = null) : Array<Array<String?>> {
     return magicSquare
 }
 
-fun getDecodeSquare(numberSquare: Array<Array<Int>>, source: String) : Array<Array<String?>> {
+fun getDecodeSquare(
+    numberSquare: Array<Array<Int>>,
+    source: String) : Array<Array<String?>> {
     var sourceCounter = 0
     return (numberSquare.map { row ->
         (row.map { index ->
@@ -82,7 +84,8 @@ val MagicSquare = object: ICipher {
 
         val numberSquare = generateSquare(squareSize)
         val intSquare = numberSquare
-            .map { row -> row.map { index -> index?.toInt() ?: 0 }.toTypedArray() }
+            .map { row -> row.map { index -> index?.toInt() ?: 0 }
+                .toTypedArray() }
             .toTypedArray()
 
         val decodeSquare = getDecodeSquare(intSquare, source)

@@ -6,14 +6,16 @@ val Caesar = object : ICipher {
     override val encodeAlphabets = standardAlphabets
     override val decodeAlphabets = standardAlphabets
     override val keyDescriptions = listOf(
-        KeyDescription("Shift", Int::class.java, null, 3)
+        KeyDescription("Shift", Int::class.java, listOf(numbersAlphabet), 3)
     )
 
     override fun encode(source: String, arguments: Map<String, Any>): String {
         val bias = arguments["Shift"].toString().toInt()
 
         return (source.map { symbol ->
-            getSourceAlphabet(symbol, standardAlphabets)?.getWithOffset(symbol, bias) ?: symbol
+            standardAlphabets
+                .getSourceAlphabet(symbol)
+                ?.getWithOffset(symbol, bias) ?: symbol
         }).joinToString("")
     }
 

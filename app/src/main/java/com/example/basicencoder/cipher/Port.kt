@@ -1,10 +1,9 @@
 package com.example.basicencoder.cipher
 
-import com.example.basicencoder.utils.Alphabet
 import com.example.basicencoder.utils.KeyDescription
 import com.example.basicencoder.utils.englishLowerCaseAlphabet
 import com.example.basicencoder.utils.numbersAlphabet
-import kotlin.math.pow
+import kotlin.math.abs
 
 fun generateRandomSquare(sideSize: Int, key: String) : Array<Array<Int>> {
     val size = sideSize * sideSize
@@ -18,14 +17,12 @@ fun generateRandomSquare(sideSize: Int, key: String) : Array<Array<Int>> {
     }
 
     for (i in 0 until size * 6) {
-        if (i % 2 == 0) {
-            val firstIndex = keyValue * 1234 / (i + 2) % size
-            val secondIndex = keyValue * 4321 / (i + 3) % size
+        val firstIndex = abs(keyValue * 630 / (i + 2)) % size
+        val secondIndex = abs(keyValue * 4321 / (i + 3)) % size
 
-            val temp = result[firstIndex]
-            result[firstIndex] = result[secondIndex]
-            result[secondIndex] = temp
-        }
+        val temp = result[firstIndex]
+        result[firstIndex] = result[secondIndex]
+        result[secondIndex] = temp
     }
 
     return Array(sideSize) { x -> Array(sideSize) { y -> result[x * sideSize + y] } }
@@ -40,7 +37,9 @@ fun completeToSuitableLength(source: Int, length: Int): String {
 }
 
 val Port = object : ICipher {
-    override val encodeAlphabets = listOf(englishLowerCaseAlphabet.combine(" "))
+    override val encodeAlphabets = listOf(
+            englishLowerCaseAlphabet.combine(" ")
+        )
     override val decodeAlphabets = listOf(numbersAlphabet)
     override val keyDescriptions = listOf(
         KeyDescription(
@@ -97,8 +96,10 @@ val Port = object : ICipher {
             }
             val number = numberString.toInt()
 
-            val firstSymbolIndex = square.indexOfFirst { array -> array.contains(number) }
-            val secondSymbolIndex = square[firstSymbolIndex].indexOfFirst { num -> num == number }
+            val firstSymbolIndex = square
+                .indexOfFirst { array -> array.contains(number) }
+            val secondSymbolIndex = square[firstSymbolIndex]
+                .indexOfFirst { num -> num == number }
 
             result += alphabet[firstSymbolIndex]
             result += alphabet[secondSymbolIndex]

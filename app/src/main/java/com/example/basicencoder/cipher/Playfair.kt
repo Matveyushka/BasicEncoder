@@ -1,10 +1,8 @@
 package com.example.basicencoder.cipher
 
-import android.widget.Toast
 import com.example.basicencoder.utils.Alphabet
 import com.example.basicencoder.utils.KeyDescription
 import com.example.basicencoder.utils.cyrillicLowerCaseAlphabet
-import java.lang.Exception
 
 val Playfair = object : ICipher {
     override val encodeAlphabets = listOf(

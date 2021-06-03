@@ -27,12 +27,16 @@ val Vigenere = object : ICipher {
         }.joinToString("")
     }
 
-    private fun forwardVigenereTableConversion(sourceChar: Char, keywordChar: Char): Char {
+    private fun forwardVigenereTableConversion(
+        sourceChar: Char,
+        keywordChar: Char): Char {
         return alphabet[(alphabet.getLetterNumber(sourceChar)!!
                 + alphabet.getLetterNumber(keywordChar)!!) % alphabet.size]
     }
 
-    private fun reverseVigenereTableConversation(sourceChar: Char, keywordChar: Char): Char {
+    private fun reverseVigenereTableConversation(
+        sourceChar: Char,
+        keywordChar: Char): Char {
         return alphabet[(alphabet.getLetterNumber(sourceChar)!!
                 + alphabet.size - alphabet.getLetterNumber(keywordChar)!!) % alphabet.size]
     }

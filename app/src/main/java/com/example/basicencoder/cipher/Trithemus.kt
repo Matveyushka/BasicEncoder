@@ -28,7 +28,7 @@ val Trithemus = object : ICipher {
             throw Exception("Bad key")
         } else {
             source.toCharArray().mapIndexed { index, symbol ->
-                getSourceAlphabet(symbol, encodeAlphabets)
+                encodeAlphabets.getSourceAlphabet(symbol)
                     ?.getWithOffset(symbol, processedSource[index]!!) ?: symbol
             }.joinToString("")
         }
@@ -45,7 +45,7 @@ val Trithemus = object : ICipher {
             throw Exception("Bad key")
         } else {
             source.toCharArray().mapIndexed { index, symbol ->
-                getSourceAlphabet(symbol, decodeAlphabets)
+                decodeAlphabets.getSourceAlphabet(symbol)
                     ?.getWithOffset(symbol, -processedSource[index]!!) ?: symbol
             }.joinToString("")
         }
@@ -57,7 +57,9 @@ val Trithemus = object : ICipher {
         "-" to { a, b -> a - b }
     )
 
-    private fun tryToPerformOperation(operationIndex: Int, elements: MutableList<String>): String? {
+    private fun tryToPerformOperation(
+        operationIndex: Int,
+        elements: MutableList<String>): String? {
         if (operationIndex == 0 || operationIndex == elements.count() - 1) {
             return null
         }
@@ -94,7 +96,9 @@ val Trithemus = object : ICipher {
         return elements
     }
 
-    private fun runOperators(elements: MutableList<String>, operators: Array<String>) : Boolean {
+    private fun runOperators(
+        elements: MutableList<String>,
+        operators: Array<String>) : Boolean {
         var badKey = false
 
         var operationCompleted = false

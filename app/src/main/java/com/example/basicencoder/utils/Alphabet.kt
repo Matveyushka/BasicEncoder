@@ -6,7 +6,6 @@ class Alphabet(alphabet: String, val name: String) {
     private var letters: Array<Char> = alphabet.toCharArray().distinct().toTypedArray()
 
     var size: Int = letters.size
-        private set
 
     operator fun get(index: Int) : Char {
         return letters[index]
@@ -17,14 +16,14 @@ class Alphabet(alphabet: String, val name: String) {
     }
 
     fun getKeyedAlphabet(key: String) : Alphabet? {
-        if (!this.letters.toList().containsAll(key.toList())) {
+        if (!isStringInAlphabet(key)) {
             return null
         }
         return Alphabet(key + this.letters.filter { char -> !key.contains(char) }.joinToString(""), name)
     }
 
     fun getLetterNumber(letter: Char) : Int? {
-        return if (letter in letters) {
+        return if (isLetterInAlphabet(letter)) {
             letters.indexOf(letter)
         } else {
             null
@@ -51,7 +50,7 @@ class Alphabet(alphabet: String, val name: String) {
         }
     }
 
-    fun isLetterInAlphabet(letter: Char) : Boolean = letters.contains(letter)
+    fun isLetterInAlphabet(letter: Char) : Boolean = letter in letters
 
     fun isStringInAlphabet(source: String) : Boolean = source.all { symbol -> isLetterInAlphabet(symbol)}
 
@@ -70,15 +69,9 @@ val cyrillicLowerCaseAlphabet = Alphabet("абвгдеёжзийклмнопрс
 
 val cyrillicUpperCaseAlphabet = Alphabet("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "Cyrillic UPPER case")
 
-val byteAlphabet = Alphabet(" йцукеёнгшщзхфывапролджэячсмитьбюЙЦУКЕЁНГШЩЗХФЫВАПРОЛДЖЭЯЧСМИТЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ", "Byte alphabet")
+val byteAlphabet = Alphabet(" йцукеёнгшщзхфывапролджэячсмитьбюЦУКЁНГШЩЗХФЙЕВТАМЫПРОЛДЖЭЯЧСИЬБЮqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#₽_&-+()/*\"':;!?,.~`|•√π÷×¶∆£\$¢€¥^°={}\\%©®⁜⁛™✓[]<>ↀↈαβγδεζηΘθΛλμπρστφχΨψΩω⇒→⊃⇔∧∨¬∀∃∅∈∉⊆⊂⊇⊃∪⋂↦ℕℤℚℝℂ≈≤≥∝√∞⊲×⊕⊗∫∑∏↕↹↺↻ᚠᚢᚣᛊᚺᛒᛉᚤᚦᛋᚨᚬᚭᚮᚱᚳᚴ", "Byte alphabet")
 
 val numbersAlphabet = Alphabet("0123456789", "Numbers")
-
-val commonAlphabet = englishLowerCaseAlphabet
-    .combine(englishUpperCaseAlphabet)
-    .combine(cyrillicLowerCaseAlphabet)
-    .combine(cyrillicUpperCaseAlphabet)
-    .combine(numbersAlphabet)
 
 val standardAlphabets = listOf(
         englishLowerCaseAlphabet,
@@ -88,8 +81,8 @@ val standardAlphabets = listOf(
         numbersAlphabet
 )
 
-fun getSourceAlphabet(letter: Char, alphabets: List<Alphabet> ) : Alphabet? {
-    val validAlphabets = alphabets.filter { alphabet -> alphabet.isLetterInAlphabet(letter) }
+fun List<Alphabet>.getSourceAlphabet(letter: Char) : Alphabet? {
+    val validAlphabets = this.filter { alphabet -> alphabet.isLetterInAlphabet(letter) }
     return if (validAlphabets.count() > 0) {
         validAlphabets[0]
     } else {

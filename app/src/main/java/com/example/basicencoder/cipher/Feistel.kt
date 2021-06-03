@@ -65,7 +65,7 @@ private fun multMod(blockPart: String, key: String): String {
 }
 
 private fun getKeyHash(key: String): String {
-    val numberHash = (key.hashCode().toDouble().pow(12) % MAX_VALUE).toInt()
+    val numberHash = (key.hashCode().toDouble().pow(30) % MAX_VALUE).toInt()
     return byteAlphabet[numberHash % 256].toString() +
             byteAlphabet[numberHash / 256 % 256] +
             byteAlphabet[numberHash / 256 / 256 % 256] +

@@ -75,7 +75,9 @@ val CombinedCipher = object : ICipher {
         for (element in source) {
             val numElement = element.toString().toInt()
             if (currentValue > 0) {
-                result += alphabetWithoutKeyword[currentValue * 10 + nums.indexOf(numElement) - 10]
+                result += alphabetWithoutKeyword[
+                        currentValue * 10 + nums.indexOf(numElement) - 10
+                    ]
                 currentValue = 0
             }
             else if (keyNums.contains(numElement)) {
